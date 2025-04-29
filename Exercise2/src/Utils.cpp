@@ -216,7 +216,9 @@ bool ImportCell2Ds(PolygonalMesh& mesh)
         mesh.Cell2DsId.push_back(id);
         mesh.Cell2DsVertices.push_back(vertices);
         mesh.Cell2DsEdges.push_back(edges);
-		 
+		
+		
+		//TEST AREA POLIGONI
 		double area = 0.0;
         const std::vector<unsigned int>& verts = mesh.Cell2DsVertices.back();
         unsigned int N = verts.size();
