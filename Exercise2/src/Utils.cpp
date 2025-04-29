@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include "Eigen/Eigen"
 
 namespace PolygonalLibrary
 {
@@ -126,6 +127,13 @@ bool ImportCell1Ds(PolygonalMesh& mesh)
       
 
         mesh.Cell1DsId.push_back(id);
+		
+		// TEST LUNGHEZZA SEGMENTI
+		if(mesh.Cell1DsExtrema(0, id) == mesh.Cell1DsExtrema(1, id))
+        {
+            cerr<<"ERROR: the edge " << id << " has length equal to zero";
+            return false;	
+        }
 
         // Marker
         if(marker != 0)
@@ -139,9 +147,9 @@ bool ImportCell1Ds(PolygonalMesh& mesh)
             {
                 it->second.push_back(id);
             }
+			
         }
     }
-
     return true;
 }
 
@@ -208,6 +216,28 @@ bool ImportCell2Ds(PolygonalMesh& mesh)
         mesh.Cell2DsId.push_back(id);
         mesh.Cell2DsVertices.push_back(vertices);
         mesh.Cell2DsEdges.push_back(edges);
+		 
+		double area = 0.0;
+        const std::vector<unsigned int>& verts = mesh.Cell2DsVertices.back();
+        unsigned int N = verts.size();
+
+        for (unsigned int i = 0; i < N; ++i)
+        {
+            unsigned int i0 = verts[i];
+            unsigned int i1 = verts[(i + 1) % N];
+
+            const auto& p0 = mesh.Cell0DsCoordinates.col(i0);
+            const auto& p1 = mesh.Cell0DsCoordinates.col(i1);
+
+            area += p0(0) * p1(1) - p1(0) * p0(1);
+        }
+        area = std::abs(area) * 0.5;
+
+        if (area <= 1e-16)
+        {
+            std::cerr << "ERROR: il poligono " << id << " has zero area" << std::endl;
+            return false;
+        }
 
         // Marker (opzionale anche per Cell2D)
         if(marker != 0)
@@ -225,5 +255,6 @@ bool ImportCell2Ds(PolygonalMesh& mesh)
     }
 
     return true;
+}	
 }
-}
+

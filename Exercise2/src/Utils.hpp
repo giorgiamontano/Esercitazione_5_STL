@@ -7,6 +7,7 @@ using namespace std;
 
 namespace PolygonalLibrary
 {
+
 /// Import the polygonal mesh and test if the mesh is correct
 /// mesh: a PolygonalMesh struct
 /// return the result of the reading, true if is success, false otherwise

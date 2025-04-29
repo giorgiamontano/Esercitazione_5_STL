@@ -12,12 +12,11 @@ int main()
     PolygonalMesh mesh;
 
     // Carica la mesh poligonale (cellule 0D, 1D, 2D)
-    if (!ImportMesh(mesh)) {
+    if (!ImportMesh(mesh)) 
+	{
         cerr << "File not found" << endl;
         return 1;
     }
-
-    // Esportazione dei dati (senza test, solo esportazione)
 
     Gedim::UCDUtilities utilities;
     utilities.ExportPoints("./Cell0Ds.inp",
@@ -30,4 +29,5 @@ int main()
 
 
     return 0;
+
 }
